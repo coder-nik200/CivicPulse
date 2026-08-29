@@ -5,8 +5,20 @@ import { createIssueSchema } from "@/lib/validators";
 export async function GET(request: NextRequest) {
   const category = request.nextUrl.searchParams.get("category");
   const status = request.nextUrl.searchParams.get("status");
+<<<<<<< HEAD
   const issues = issueStore.all().filter((issue) =>
     (!category || issue.category === category) && (!status || issue.status === status),
+=======
+  const minLat = Number(request.nextUrl.searchParams.get("minLat"));
+  const maxLat = Number(request.nextUrl.searchParams.get("maxLat"));
+  const minLng = Number(request.nextUrl.searchParams.get("minLng"));
+  const maxLng = Number(request.nextUrl.searchParams.get("maxLng"));
+  const hasBounds = [minLat, maxLat, minLng, maxLng].every(Number.isFinite);
+  const issues = issueStore.all().filter((issue) =>
+    (!category || issue.category === category) &&
+    (!status || issue.status === status) &&
+    (!hasBounds || (issue.lat >= minLat && issue.lat <= maxLat && issue.lng >= minLng && issue.lng <= maxLng)),
+>>>>>>> a291098 (Commit changes)
   );
   return NextResponse.json({ issues });
 }

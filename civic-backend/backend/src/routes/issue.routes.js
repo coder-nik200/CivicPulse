@@ -3,6 +3,7 @@ import * as issueController from "../controllers/issue.controller.js";
 
 const router = Router();
 
+<<<<<<< HEAD
 // Issues list and creation
 router.post("/", issueController.create);
 router.get("/", issueController.getAll);
@@ -34,3 +35,12 @@ router.patch("/:id/resolve", issueController.resolve);
 
 export default router;
 
+=======
+router.post("/", issueController.create);
+router.get("/", issueController.getAll);
+router.get("/:id", issueController.getOne);
+router.patch("/:id/status", issueController.updateStatus);
+router.post("/:id/upvote", issueController.upvote);
+
+export default router;
+>>>>>>> a291098 (Commit changes)

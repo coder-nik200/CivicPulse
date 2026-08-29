@@ -1,6 +1,13 @@
+<<<<<<< HEAD
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5001/api";
 
 type IssueCategory = "pothole" | "garbage" | "streetlight" | "obstruction" | "waterlogging";
+=======
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL ?? "/api";
+
+type IssueCategory = "pothole" | "garbage" | "streetlight";
+>>>>>>> a291098 (Commit changes)
 
 interface SubmitIssueInput {
   file: File;
@@ -11,6 +18,7 @@ interface SubmitIssueInput {
   description?: string;
 }
 
+<<<<<<< HEAD
 interface UploadImageInput {
   base64Data: string;
   isResolution?: boolean;
@@ -47,6 +55,9 @@ function fileToDataUrl(file: File): Promise<string> {
 
 // Issues API
 export async function submitIssue(input: SubmitIssueInput) {
+=======
+export async function submitIssue(input: SubmitIssueInput): Promise<{ issue: { id: string } }> {
+>>>>>>> a291098 (Commit changes)
   const imageUrl = await fileToDataUrl(input.file);
 
   return request("/issues", {
@@ -62,6 +73,7 @@ export async function submitIssue(input: SubmitIssueInput) {
   });
 }
 
+<<<<<<< HEAD
 export async function getIssues(page = 1, limit = 50, filters: any = {}) {
   const query = new URLSearchParams({
     page: String(page),
@@ -165,3 +177,33 @@ export async function getStatistics() {
 export async function getIssuesByCategory() {
   return request("/issues/stats/by-category");
 }
+=======
+async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
+  const response = await fetch(`${API_BASE_URL}${path}`, {
+    ...init,
+    headers: {
+      "Content-Type": "application/json",
+      ...(init.headers || {}),
+    },
+  });
+
+  const payload = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    throw new Error(payload.error ?? "Request failed");
+  }
+
+  return payload as T;
+}
+
+function fileToDataUrl(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = () => resolve(String(reader.result));
+    reader.onerror = reject;
+
+    reader.readAsDataURL(file);
+  });
+}
+>>>>>>> a291098 (Commit changes)

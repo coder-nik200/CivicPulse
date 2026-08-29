@@ -1,14 +1,24 @@
+<<<<<<< HEAD
 import { Issue } from "../models/issue.model.js";
+=======
+// Demo repository used by the standalone backend. It deliberately has no
+// external service dependency, so the project works immediately after npm install.
+const issues = [];
+let nextId = 1040;
+>>>>>>> a291098 (Commit changes)
 
 const categories = new Set(["pothole", "garbage", "streetlight", "obstruction", "waterlogging"]);
 const statuses = new Set(["REPORTED", "AI_ANALYZED", "VERIFIED", "ASSIGNED", "IN_PROGRESS", "RESOLVED", "RESOLUTION_VERIFIED", "CLOSED"]);
 
+<<<<<<< HEAD
 let nextId = 1040;
 
 function getNextId() {
   return `CIV-${nextId++}`;
 }
 
+=======
+>>>>>>> a291098 (Commit changes)
 function assertIssueInput(input) {
   if (!input || !categories.has(input.category)) throw new Error("A valid category is required");
   if (typeof input.imageUrl !== "string" || input.imageUrl.length < 20 || input.imageUrl.length > 8_000_000) throw new Error("A valid image is required");
@@ -28,6 +38,7 @@ function summary(category, description) {
 
 export async function createIssue(input) {
   assertIssueInput(input);
+<<<<<<< HEAD
   const now = new Date();
 
   // Check for nearby duplicates (within 0.001 degrees ~111 meters)
@@ -38,17 +49,25 @@ export async function createIssue(input) {
     status: { $ne: "CLOSED" },
   });
 
+=======
+  const now = new Date().toISOString();
+  const duplicate = issues.find((issue) => issue.category === input.category && Math.abs(issue.lat - input.lat) < 0.001 && Math.abs(issue.lng - input.lng) < 0.001 && issue.status !== "CLOSED");
+>>>>>>> a291098 (Commit changes)
   if (duplicate) {
     duplicate.reportCount += 1;
     duplicate.uniqueReporterCount += 1;
     duplicate.severity = score(duplicate.category, duplicate.reportCount);
     duplicate.priority = Math.round(duplicate.severity * 10);
     duplicate.updatedAt = now;
+<<<<<<< HEAD
     await duplicate.save();
+=======
+>>>>>>> a291098 (Commit changes)
     return { issue: duplicate, isDuplicate: true };
   }
 
   const severity = score(input.category);
+<<<<<<< HEAD
   const issueId = getNextId();
 
   const issue = new Issue({
@@ -153,10 +172,37 @@ export async function updateIssueStatus(id, status) {
     { new: true }
   ).lean();
 
+=======
+  const issue = {
+    id: `CIV-${nextId++}`, category: input.category, imageUrl: input.imageUrl,
+    lat: input.lat, lng: input.lng, address: input.address.trim(),
+    description: input.description?.trim() || undefined, severity, confidence: 82,
+    priority: Math.round(severity * 10), reportCount: 1, uniqueReporterCount: 1,
+    status: "AI_ANALYZED", createdAt: now, updatedAt: now,
+    aiSummary: summary(input.category, input.description),
+  };
+  issues.unshift(issue);
+  return { issue, isDuplicate: false };
+}
+
+export async function getIssues(filters = {}) {
+  return issues.filter((issue) => (!filters.category || issue.category === filters.category) && (!filters.status || issue.status === filters.status));
+}
+
+export async function getIssueById(id) { return issues.find((issue) => issue.id === id) || null; }
+
+export async function updateIssueStatus(id, status) {
+  if (!statuses.has(status)) throw new Error("Invalid status");
+  const issue = await getIssueById(id);
+  if (!issue) return null;
+  issue.status = status;
+  issue.updatedAt = new Date().toISOString();
+>>>>>>> a291098 (Commit changes)
   return issue;
 }
 
 export async function upvoteIssue(id) {
+<<<<<<< HEAD
   const issue = await Issue.findOneAndUpdate(
     { id },
     {
@@ -298,3 +344,12 @@ export async function getIssuesByCategory() {
   return byCategory;
 }
 
+=======
+  const issue = await getIssueById(id);
+  if (!issue) return null;
+  issue.reportCount += 1;
+  issue.priority = Math.round(score(issue.category, issue.reportCount) * 10);
+  issue.updatedAt = new Date().toISOString();
+  return issue;
+}
+>>>>>>> a291098 (Commit changes)

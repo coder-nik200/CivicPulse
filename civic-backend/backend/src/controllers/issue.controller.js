@@ -1,5 +1,8 @@
 import * as issueService from "../services/issue.service.js";
+<<<<<<< HEAD
 import * as imageService from "../services/image.service.js";
+=======
+>>>>>>> a291098 (Commit changes)
 
 export async function create(req, res) {
   try {
@@ -12,6 +15,7 @@ export async function create(req, res) {
 
 export async function getAll(req, res) {
   try {
+<<<<<<< HEAD
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 50;
     const result = await issueService.getIssues(req.query, page, limit);
@@ -25,6 +29,10 @@ export async function getMapIssues(req, res) {
   try {
     const result = await issueService.getIssues(req.query);
     res.json({ issues: result.issues });
+=======
+    const issues = await issueService.getIssues(req.query);
+    res.json({ issues });
+>>>>>>> a291098 (Commit changes)
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -40,6 +48,7 @@ export async function getOne(req, res) {
   }
 }
 
+<<<<<<< HEAD
 export async function getNearby(req, res) {
   try {
     const { lat, lng, radius } = req.query;
@@ -59,6 +68,8 @@ export async function getNearby(req, res) {
   }
 }
 
+=======
+>>>>>>> a291098 (Commit changes)
 export async function updateStatus(req, res) {
   try {
     const updated = await issueService.updateIssueStatus(req.params.id, req.body.status);
@@ -78,6 +89,7 @@ export async function upvote(req, res) {
     res.status(500).json({ error: err.message });
   }
 }
+<<<<<<< HEAD
 
 export async function follow(req, res) {
   try {
@@ -187,3 +199,5 @@ export async function getByCategory(req, res) {
   }
 }
 
+=======
+>>>>>>> a291098 (Commit changes)

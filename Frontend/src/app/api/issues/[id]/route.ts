@@ -10,5 +10,9 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
   const parsed = updateStatusSchema.safeParse(await request.json());
   if (!parsed.success) return NextResponse.json({ error: "Invalid status" }, { status: 400 });
   const issue = issueStore.updateStatus((await params).id, parsed.data.status);
+<<<<<<< HEAD
   return issue ? NextResponse.json({ issue }) : NextResponse.json({ error: "Issue not found" }, { status: 404 });
+=======
+  return issue ? NextResponse.json({ issue }) : NextResponse.json({ error: "Status change is not allowed from the current lifecycle stage." }, { status: 409 });
+>>>>>>> a291098 (Commit changes)
 }

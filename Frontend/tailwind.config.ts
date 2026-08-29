@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+<<<<<<< HEAD
 
 export default {
   content: ["./src/**/*.{ts,tsx}"],
@@ -126,3 +127,6 @@ export default {
   plugins: [],
 } satisfies Config;
 
+=======
+export default { content: ["./src/**/*.{ts,tsx}"], theme: { extend: { colors: { ink: "#102a43", civic: "#0f766e" }, boxShadow: { panel: "0 18px 50px rgba(15,42,67,.10)" } } }, plugins: [] } satisfies Config;
+>>>>>>> a291098 (Commit changes)
